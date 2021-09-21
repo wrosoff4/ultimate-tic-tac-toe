@@ -9,12 +9,7 @@ import javax.swing.SwingUtilities;
 public class TestUltimateTCT {
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			  public void run() {
-				  new UltimateTCT();
-			  }
-	});
-
+		SwingUtilities.invokeLater(UltimateTCT::new);
 	}
 
 }

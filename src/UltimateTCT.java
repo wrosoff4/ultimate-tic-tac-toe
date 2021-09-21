@@ -25,31 +25,23 @@ import javax.swing.border.Border;
 
 
 public class UltimateTCT{
-	
-	private JFrame jfrm = new JFrame("Ultimate Tic Tac Toe");
-	
-	private JPanel jpnl_topL = new JPanel();
-	private JPanel jpnl_topR = new JPanel();
-	private JPanel jpnl_top = new JPanel();
-	private JPanel boardPanel = new JPanel(new GridLayout(3,3));
-	private JPanel jpnl_bottom = new JPanel();
-	
-	
+
+	private final JPanel boardPanel = new JPanel(new GridLayout(3,3));
+
+
 	final Border border = BorderFactory.createLineBorder(Color.red);
 	
-	private JButton playerO = new JButton("Player O");
-	private JButton playerX = new JButton("Player X");
-	private JButton restart = new JButton("Restart");
-	private JButton undo = new JButton("Undo");
-	private JButton stats = new JButton("Playing Stats");
+	private final JButton playerO = new JButton("Player O");
+	private final JButton playerX = new JButton("Player X");
+	private final JButton undo = new JButton("Undo");
 	private JButton lastClicked = null;
 	
-	private JTextField wins = new JTextField(15);
-	private JTextField totalGames = new JTextField(5);
-	private JTextField avgMoves = new JTextField(5);
+	private final JTextField wins = new JTextField(15);
+	private final JTextField totalGames = new JTextField(5);
+	private final JTextField avgMoves = new JTextField(5);
 
-	private Player X = new Player("X", Color.WHITE);
-	private Player O = new Player("O", Color.BLACK);
+	private final Player X = new Player("X", Color.WHITE);
+	private final Player O = new Player("O", Color.BLACK);
 	private Player currentPlayer;
 	private Player winningPlayer = null;
 
@@ -59,7 +51,7 @@ public class UltimateTCT{
 	
 	private boolean gameOver = false;
 	
-	private ArrayList<Board> boards = new ArrayList<>();
+	private final ArrayList<Board> boards = new ArrayList<>();
 //	private Stack<Integer> undoStack = new Stack<Integer>();
 	
 	final int[][] winningCombos = new int[][] { {0,1,2}, {3,4,5}, {6,7,8},
@@ -70,20 +62,22 @@ public class UltimateTCT{
 	public UltimateTCT(){
 		Random rand = new Random();
 		int coin = rand.nextInt(2);
-		
-		this.jfrm.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		this.jfrm.setSize(850, 500);
-		this.jfrm.setTitle("Ultimate Tic Tac Toe");
+		JFrame jfrm = new JFrame("Ultimate Tic Tac Toe");
+		jfrm.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		jfrm.setSize(850, 500);
+		jfrm.setTitle("Ultimate Tic Tac Toe");
 //		contentPane.setLayout(new BorderLayout());
 		this.wins.setEditable(false);
 		this.totalGames.setEditable(false);
 		this.avgMoves.setEditable(false);
 		
 		// jpnl_top construction
-		this.jpnl_topL.add(new JLabel("Now Playing:"));
-		this.jpnl_topL.add(this.playerO);
-		this.jpnl_topL.add(this.playerX);
+		JPanel jpnl_topL = new JPanel();
+		jpnl_topL.add(new JLabel("Now Playing:"));
+		jpnl_topL.add(this.playerO);
+		jpnl_topL.add(this.playerX);
 		this.playerX.setEnabled(false);
 		this.playerO.setEnabled(false);
 		this.undo.setEnabled(false);
@@ -101,35 +95,40 @@ public class UltimateTCT{
 		}
 		
 		 // set top panel
-		this.jpnl_topR.add(new JLabel("Manage Game:"));
-		
-		this.restart.addActionListener(new RestartButtonListener());
-		this.jpnl_topR.add(this.restart);
+		JPanel jpnl_topR = new JPanel();
+		jpnl_topR.add(new JLabel("Manage Game:"));
+
+		JButton restart = new JButton("Restart");
+		restart.addActionListener(new RestartButtonListener());
+		jpnl_topR.add(restart);
 		
 		this.undo.addActionListener(new UndoButtonListener());
-		this.jpnl_topR.add(this.undo);
-		
-		this.jpnl_top.setBorder(border);
-		this.jpnl_top.add(this.jpnl_topL);
-		this.jpnl_top.add(this.jpnl_topR);
+		jpnl_topR.add(this.undo);
+
+		JPanel jpnl_top = new JPanel();
+		jpnl_top.setBorder(border);
+		jpnl_top.add(jpnl_topL);
+		jpnl_top.add(jpnl_topR);
 		
 		//set bottom panel
-		this.stats.addActionListener(new StatButtonListener());
-		this.jpnl_bottom.add(this.stats);
-		this.jpnl_bottom.add(new JLabel("Win %:"));
-		this.jpnl_bottom.add(this.wins);
-		this.jpnl_bottom.add(new JLabel("Total # of games:"));
-		this.jpnl_bottom.add(this.totalGames);
-		this.jpnl_bottom.add(new JLabel("Average # of moves per win:"));
-		this.jpnl_bottom.add(this.avgMoves);
+		JButton stats = new JButton("Playing Stats");
+		stats.addActionListener(new StatButtonListener());
+		JPanel jpnl_bottom = new JPanel();
+		jpnl_bottom.add(stats);
+		jpnl_bottom.add(new JLabel("Win %:"));
+		jpnl_bottom.add(this.wins);
+		jpnl_bottom.add(new JLabel("Total # of games:"));
+		jpnl_bottom.add(this.totalGames);
+		jpnl_bottom.add(new JLabel("Average # of moves per win:"));
+		jpnl_bottom.add(this.avgMoves);
 		
-		this.jfrm.add(this.jpnl_top,BorderLayout.NORTH);
-		this.jfrm.add(this.jpnl_bottom, BorderLayout.SOUTH);
+		jfrm.add(jpnl_top,BorderLayout.NORTH);
+		jfrm.add(jpnl_bottom, BorderLayout.SOUTH);
 		
 		//construct game board
 		populateBoards();
-		this.jfrm.add(boardPanel);
-		this.jfrm.setVisible(true);
+		jfrm.add(boardPanel);
+		jfrm.setVisible(true);
 	}
 	
 	// create grid of game boards for ultimate board
@@ -142,7 +141,7 @@ public class UltimateTCT{
 	}
 	
 	// marks and disables a button when appropriate
-	public void markButton(JButton b, Board board, int pos) {
+	public void markButton(JButton b, Board board) {
 			if(b.isEnabled()) {
 				 undo.setEnabled(true);
 				 currentPlayer.moves++;
@@ -181,21 +180,21 @@ public class UltimateTCT{
 	public void checkBoard(Player p) {
 		if(p != null) {
 			int count;
-			for(int i=0; i<winningCombos.length; i++) {
+			for (int[] winningCombo : winningCombos) {
 				count = 0;
-				for(int j=0; j<3; j++) {
-					if(p.boardsWon.contains(winningCombos[i][j])) {
+				for (int j = 0; j < 3; j++) {
+					if (p.boardsWon.contains(winningCombo[j])) {
 						count++;
 					}
 				}
-				if(count>2) {
+				if (count > 2) {
 					gameOver = true;
 					undo.setEnabled(false);
 					winningPlayer = p;
-					JOptionPane.showMessageDialog(null, "Game Won by Player "+p.label+"!\n"+
-													"Click \"Playing Stats\" to see statistics for winning player."+
-													"\nClick \"Restart\" for new game.");
-					System.out.println("Game Won by "+p.label);
+					JOptionPane.showMessageDialog(null, "Game Won by Player " + p.label + "!\n" +
+							"Click \"Playing Stats\" to see statistics for winning player." +
+							"\nClick \"Restart\" for new game.");
+					System.out.println("Game Won by " + p.label);
 					break;
 				}
 			}
@@ -203,9 +202,10 @@ public class UltimateTCT{
 		if(!gameOver && closedBoards==9) {
 			gameOver = true;
 			undo.setEnabled(false);
-			JOptionPane.showMessageDialog(null, "Game is Draw.\n"
-										+"Click \"Playing Stats\" to see statistics for winning player."
-										+"\nClick \"Restart\" for new game.");
+			JOptionPane.showMessageDialog(null, """
+					Game is Draw.
+					Click "Playing Stats" to see statistics for winning player.
+					Click "Restart" for new game.""");
 		}
 	}
 	// creates new gameboard
@@ -245,10 +245,9 @@ public class UltimateTCT{
 	}
 
 // tic tac toe board class
-@SuppressWarnings("serial")
 class Board extends JPanel{
-	private ArrayList<JButton> button = new ArrayList<JButton>();
-	private int boardNum;
+	private final ArrayList<JButton> button = new ArrayList<>();
+	private final int boardNum;
 	private int moves = 0;
 	private boolean closed = false;
 	
@@ -289,27 +288,27 @@ class Board extends JPanel{
 		int xCount;
 		int oCount;
 		Player winner = null;
-		for(int i=0; i<winningCombos.length;i++) {
+		for (int[] winningCombo : winningCombos) {
 			xCount = 0;
 			oCount = 0;
-			for(int j=0; j<3; j++) {
-				if(xButtons.contains(winningCombos[i][j])) {
+			for (int j = 0; j < 3; j++) {
+				if (xButtons.contains(winningCombo[j])) {
 					xCount++;
 				}
-				if(oButtons.contains(winningCombos[i][j])) {
+				if (oButtons.contains(winningCombo[j])) {
 					oCount++;
-				}	
+				}
 			}
-			if(xCount == 3) {
-				System.out.println("Board "+this.boardNum+" won by X");
+			if (xCount == 3) {
+				System.out.println("Board " + this.boardNum + " won by X");
 				won = true;
 				X.boardsWon.add(this.boardNum);
 				winner = X;
 				break;
 
 			}
-			if(oCount == 3) {
-				System.out.println("Board "+this.boardNum+" won by O");
+			if (oCount == 3) {
+				System.out.println("Board " + this.boardNum + " won by O");
 				won = true;
 				winner = O;
 				O.boardsWon.add(this.boardNum);
@@ -329,7 +328,7 @@ class Board extends JPanel{
 				for(JButton b : this.button) {
 					b.setBackground(Color.LIGHT_GRAY);
 				}
-				checkBoard(winner);
+				checkBoard(null);
 			}
 		}
 	}//end check panel
@@ -346,10 +345,10 @@ class Board extends JPanel{
 	public void openPanel() {
 		this.closed = false;
 		if(O.boardsWon.contains(this.boardNum)) {
-			O.boardsWon.remove(O.boardsWon.indexOf(this.boardNum));
+			O.boardsWon.remove((Integer) this.boardNum);
 		}
 		if(X.boardsWon.contains(this.boardNum)) {
-			X.boardsWon.remove(X.boardsWon.indexOf(this.boardNum));
+			X.boardsWon.remove((Integer) this.boardNum);
 		}
 		for(JButton b : this.button) {
 			int owned = (int) b.getClientProperty("OWNED");
@@ -374,10 +373,10 @@ class Board extends JPanel{
 }//end Board class
 
 // player class
-class Player{
-	private ArrayList<Integer> boardsWon = new ArrayList<>();
-	private String label;
-	private Color color;
+static class Player{
+	private final ArrayList<Integer> boardsWon = new ArrayList<>();
+	private final String label;
+	private final Color color;
 	private int moves;
 	
 	public Player(String label, Color c) {
@@ -394,19 +393,18 @@ class GameButtonListener implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(!gameOver) {
 			JButton b = (JButton)e.getSource();
-			int pos = (int)b.getClientProperty("POS");
 			Board picked = (Board) b.getParent();
 			if(lastPosition<0) {
 //				undoStack.push(lastPosition);
-				markButton(b, picked, pos);
+				markButton(b, picked);
 			}
 			else {
 				if(boards.get(lastPosition).closed) {
-					markButton(b, picked, pos);
+					markButton(b, picked);
 			}
 			else {
 				if(lastPosition == picked.boardNum) {
-					markButton(b, picked, pos);
+					markButton(b, picked);
 				}
 			}
 			}
@@ -477,7 +475,9 @@ class StatButtonListener implements ActionListener{
 				float playerWon =  winningPlayer.boardsWon.size();
 				float closed = closedBoards;
 				float winPer = (playerWon / closed) * 100;
-				float avgPerWin = winningPlayer.moves / winningPlayer.boardsWon.size();
+				float avgPerWin;
+				//noinspection IntegerDivisionInFloatingPointContext
+				avgPerWin = (float) Math.ceil(winningPlayer.moves / winningPlayer.boardsWon.size());
 				totalGames.setText(""+closedBoards);
 				avgMoves.setText(""+avgPerWin);
 				wins.setText(winPer+"%");
